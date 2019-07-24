@@ -1,1 +1,1 @@
-Added an endpoint to search trackByName.
+Used Swagger 2.
