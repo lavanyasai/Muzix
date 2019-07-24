@@ -1,5 +1,7 @@
 package com.stackroute.muzixapp.controller;
 
+import com.stackroute.muzixapp.exceptions.TrackAlreadyExistsException;
+import com.stackroute.muzixapp.exceptions.TrackNotFoundException;
 import com.stackroute.muzixapp.model.Track;
 import com.stackroute.muzixapp.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,35 +26,55 @@ public class TrackController {
 
 	//update all the methods with code
 	@PostMapping("track")
-	public ResponseEntity<?> addTrack(@RequestBody Track track) {
+	public ResponseEntity<?> addTrack(@RequestBody Track track) throws TrackAlreadyExistsException {
 		ResponseEntity responseEntity;
-		trackService.saveTrack(track);
-		responseEntity = new ResponseEntity<String>("Succesfully Created", HttpStatus.CREATED);
+		try {
+			trackService.saveTrack(track);
+			responseEntity = new ResponseEntity<String>("Succesfully Created", HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+		}
 		return responseEntity;
 	}
 
 	@GetMapping("track")
 	public ResponseEntity<?> indexPage(ModelMap model) {
 		ResponseEntity responseEntity;
-		List<Track> trackList = trackService.getAllTracks();
-		model.addAttribute("trackList", trackList);
-		responseEntity = new ResponseEntity<List<Track>>(trackList, HttpStatus.OK);
+		try {
+			List<Track> trackList = trackService.getAllTracks();
+			model.addAttribute("trackList", trackList);
+			responseEntity = new ResponseEntity<List<Track>>(trackList, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+		}
 		return responseEntity;
 	}
 
 	@DeleteMapping("track/{id}")
-	public ResponseEntity<?> deleteTrack(@PathVariable(name = "id") int id) {
+	public ResponseEntity<?> deleteTrack(@PathVariable(name = "id") int id) throws TrackNotFoundException {
 		ResponseEntity responseEntity;
-		trackService.deleteTrack(id);
-		responseEntity = new ResponseEntity<String>("Succesfully Deleted", HttpStatus.OK);
+		try {
+			trackService.deleteTrack(id);
+			responseEntity = new ResponseEntity<String>("Succesfully Deleted", HttpStatus.OK);
+		}
+		catch (Exception e) {
+			responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+		}
 		return responseEntity;
 	}
 
 	@PutMapping("track/{id}")
-	public ResponseEntity<?> updateTrack(@PathVariable(name = "id") int id, @RequestBody Track track) {
+	public ResponseEntity<?> updateTrack(@PathVariable(name = "id") int id, @RequestBody Track track) throws TrackNotFoundException {
 		ResponseEntity responseEntity;
-		trackService.updateTrack(track);
-		responseEntity = new ResponseEntity<String>("Succesfully Updated", HttpStatus.OK);
+		try {
+			trackService.updateTrack(track);
+			responseEntity = new ResponseEntity<Track>(track, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+		}
 		return responseEntity;
 	}
 

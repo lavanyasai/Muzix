@@ -1,5 +1,7 @@
 package com.stackroute.muzixapp.service;
 
+import com.stackroute.muzixapp.exceptions.TrackAlreadyExistsException;
+import com.stackroute.muzixapp.exceptions.TrackNotFoundException;
 import com.stackroute.muzixapp.model.Track;
 import com.stackroute.muzixapp.repository.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +20,24 @@ public class TrackServiceImpl implements TrackService {
 	}
 
 	@Override
-	public boolean saveTrack(Track track) {
+	public boolean saveTrack(Track track) throws TrackAlreadyExistsException {
 		boolean result = false;
-		Track savedTrack = trackRepository.save(track);
-		if(savedTrack != null) {
+		if(!trackRepository.findById(track.getId()).isPresent()) {
+			Track savedTrack = trackRepository.save(track);
 			result = true;
+		}
+		else {
+			throw new TrackAlreadyExistsException("Track Already Exists");
 		}
 		return result;
 	}
 
 	@Override
-	public boolean deleteTrack(int id) {
+	public boolean deleteTrack(int id) throws TrackNotFoundException {
 		boolean result = false;
 		if(!trackRepository.findById(id).isPresent()) {
 			result = false;
+			throw new TrackNotFoundException("Track Not Found");
 		}
 		else {
 			trackRepository.delete(getTrackById(id));
@@ -45,13 +51,16 @@ public class TrackServiceImpl implements TrackService {
 	}
 
 	@Override
-	public Track getTrackById(int id) {
+	public Track getTrackById(int id) throws TrackNotFoundException {
 		Track savedTrack = trackRepository.getOne(id);
+		if(savedTrack == null) {
+			throw new TrackNotFoundException("Track Not Found");
+		}
 		return savedTrack;
 	}
 
 	@Override
-	public boolean updateTrack(Track track) {
+	public boolean updateTrack(Track track) throws TrackNotFoundException {
 		boolean result = false;
 		Track savedTrack = trackRepository.getOne(track.getId());
 		savedTrack.setName(track.getName());
@@ -59,6 +68,9 @@ public class TrackServiceImpl implements TrackService {
 		trackRepository.save(savedTrack);
 		if(savedTrack != null) {
 			result = true;
+		}
+		else {
+			throw new TrackNotFoundException("Track Not Found");
 		}
 		return result;
 	}
