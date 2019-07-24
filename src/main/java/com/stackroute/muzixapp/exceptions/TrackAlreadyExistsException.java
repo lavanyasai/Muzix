@@ -1,15 +1,6 @@
 package com.stackroute.muzixapp.exceptions;
 
-public class TrackAlreadyExistsException extends Exception{
+public class TrackAlreadyExistsException extends RuntimeException{
 
-    private String message;
-
-    private TrackAlreadyExistsException() {
-
-    }
-
-    public TrackAlreadyExistsException(String message) {
-        super(message);
-        this.message = message;
-    }
+    private static final long serialVersionUID = 1L;
 }

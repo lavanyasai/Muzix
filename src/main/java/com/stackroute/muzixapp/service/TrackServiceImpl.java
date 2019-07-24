@@ -27,7 +27,7 @@ public class TrackServiceImpl implements TrackService {
 			result = true;
 		}
 		else {
-			throw new TrackAlreadyExistsException("Track Already Exists");
+			throw new TrackAlreadyExistsException();
 		}
 		return result;
 	}
@@ -37,7 +37,7 @@ public class TrackServiceImpl implements TrackService {
 		boolean result = false;
 		if(!trackRepository.findById(id).isPresent()) {
 			result = false;
-			throw new TrackNotFoundException("Track Not Found");
+			throw new TrackNotFoundException();
 		}
 		else {
 			trackRepository.delete(getTrackById(id));
@@ -53,7 +53,7 @@ public class TrackServiceImpl implements TrackService {
 	@Override
 	public List<Track> findByName(String name) throws TrackNotFoundException {
 		if(!(trackRepository.findByName(name).size() > 0))
-			throw new TrackNotFoundException("Track Not Found");
+			throw new TrackNotFoundException();
 		return trackRepository.findByName(name);
 	}
 
@@ -61,7 +61,7 @@ public class TrackServiceImpl implements TrackService {
 	public Track getTrackById(int id) throws TrackNotFoundException {
 		Track savedTrack = trackRepository.getOne(id);
 		if(savedTrack == null) {
-			throw new TrackNotFoundException("Track Not Found");
+			throw new TrackNotFoundException();
 		}
 		return savedTrack;
 	}
@@ -77,7 +77,7 @@ public class TrackServiceImpl implements TrackService {
 			result = true;
 		}
 		else {
-			throw new TrackNotFoundException("Track Not Found");
+			throw new TrackNotFoundException();
 		}
 		return result;
 	}

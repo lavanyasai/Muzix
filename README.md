@@ -1,1 +1,1 @@
-Used Swagger 2.
+Used ApplicationListener<ContextRefreshedEvent> and CommandLineRunner.

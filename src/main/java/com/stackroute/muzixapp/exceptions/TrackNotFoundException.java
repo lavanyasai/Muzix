@@ -1,15 +1,8 @@
 package com.stackroute.muzixapp.exceptions;
 
-public class TrackNotFoundException extends Exception{
+public class TrackNotFoundException extends RuntimeException{
 
-    private String message;
+    private static final long serialVersionUID = 2L;
 
-    private TrackNotFoundException() {
 
-    }
-
-    public TrackNotFoundException(String message) {
-        super(message);
-        this.message = message;
-    }
 }
