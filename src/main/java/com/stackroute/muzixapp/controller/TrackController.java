@@ -52,6 +52,20 @@ public class TrackController {
 		return responseEntity;
 	}
 
+	@GetMapping("track/{name}")
+	public ResponseEntity<?> findByName(@PathVariable(value = "name") String name, ModelMap model) {
+		ResponseEntity responseEntity;
+		try {
+			List<Track> trackList = trackService.findByName(name);
+			model.addAttribute("trackList", trackList);
+			responseEntity = new ResponseEntity<List<Track>>(trackList, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
+		}
+		return responseEntity;
+	}
+
 	@DeleteMapping("track/{id}")
 	public ResponseEntity<?> deleteTrack(@PathVariable(name = "id") int id) throws TrackNotFoundException {
 		ResponseEntity responseEntity;

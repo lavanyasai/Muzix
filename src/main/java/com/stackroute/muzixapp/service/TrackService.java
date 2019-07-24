@@ -19,4 +19,6 @@ public interface TrackService {
 
 	public boolean updateTrack(Track track) throws TrackNotFoundException;
 
+	public List<Track> findByName(String Name) throws TrackNotFoundException;
+
 }
