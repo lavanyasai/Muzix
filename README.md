@@ -1,1 +1,1 @@
-Used ApplicationListener<ContextRefreshedEvent> and CommandLineRunner.
+Edited all the hard-coded values

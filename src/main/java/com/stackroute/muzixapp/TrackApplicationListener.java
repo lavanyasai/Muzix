@@ -19,7 +19,7 @@ public class TrackApplicationListener implements ApplicationListener<ContextRefr
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        Track track = new Track(1, "A", "Spring");
+        Track track = new Track();
         try {
             trackService.saveTrack(track);
             for(Track allTracks : trackService.getAllTracks()) {
