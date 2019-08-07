@@ -1,0 +1,1 @@
+Added global exception to handle the exceptions globally.
